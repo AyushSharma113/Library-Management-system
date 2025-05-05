@@ -1,32 +1,13 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import PrivateRoute from "./components/PrivateRoute";
-import Layout from "./pages/Layout";
-import "./App.css";
+import React from "react";
 
-function App() {
+import "./App.css";
+import Layout from "./pages/Layout";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import LibraryLandingPage from "./pages/LibraryLandingPage";
+export default function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Layout />} />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <DashBoard />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <>
+      <LibraryLandingPage />
+    </>
   );
 }
-
-export default App;
