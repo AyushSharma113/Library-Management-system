@@ -1,4 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export default function LibraryLandingPage() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -6,20 +12,36 @@ export default function LibraryLandingPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLoginSubmit = () => {
-    console.log("Login submitted with:", { email, password, rememberMe });
-    setShowLoginModal(false);
-    setEmail("");
-    setPassword("");
-    setRememberMe(false);
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setError("");
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard");
+    } catch (error) {
+      setError("Failed to sign in: " + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSignupSubmit = () => {
-    console.log("Signup submitted with:", { email, password });
-    setShowSignupModal(false);
-    setEmail("");
-    setPassword("");
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setError("");
+      setLoading(true);
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard");
+    } catch (error) {
+      setError("Failed to create account: " + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -279,7 +301,7 @@ export default function LibraryLandingPage() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleLoginSubmit();
+                handleLoginSubmit(e);
               }}
             >
               <div className="space-y-6">
@@ -340,11 +362,15 @@ export default function LibraryLandingPage() {
                     Forgot password?
                   </a>
                 </div>
+                {error && (
+                  <div className="text-red-500 text-sm mb-4">{error}</div>
+                )}
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                  disabled={loading}
+                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
                 >
-                  Login
+                  {loading ? "Loading..." : "Login"}
                 </button>
               </div>
             </form>
@@ -352,7 +378,7 @@ export default function LibraryLandingPage() {
               <p className="text-gray-600">
                 Don't have an account?{" "}
                 <button
-                  className="text-blue-600 hover:text-blue-500 font-medium"
+                  className="text-white hover:text-blue-500 font-medium"
                   onClick={() => {
                     setShowLoginModal(false);
                     setShowSignupModal(true);
@@ -397,7 +423,7 @@ export default function LibraryLandingPage() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSignupSubmit();
+                handleSignupSubmit(e);
               }}
             >
               <div className="space-y-6">
@@ -453,11 +479,15 @@ export default function LibraryLandingPage() {
                     Password must be at least 8 characters long
                   </p>
                 </div>
+                {error && (
+                  <div className="text-red-500 text-sm mb-4">{error}</div>
+                )}
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                  disabled={loading}
+                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
                 >
-                  Create Account
+                  {loading ? "Loading..." : "Create Account"}
                 </button>
               </div>
             </form>
@@ -465,7 +495,7 @@ export default function LibraryLandingPage() {
               <p className="text-gray-600">
                 Already have an account?{" "}
                 <button
-                  className="text-blue-600 hover:text-blue-500 font-medium"
+                  className=" text-white hover:text-blue-500 font-medium"
                   onClick={() => {
                     setShowSignupModal(false);
                     setShowLoginModal(true);

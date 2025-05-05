@@ -1,23 +1,31 @@
-import { useState } from "react";
-import { TextField, Button, Stack, Paper, Container } from "@mui/material";
-import "./App.css";
-import BookCardGrid from "./components/ListBooks";
-import Books from "./components/Books";
-import { auth, db } from "./firebase/firebase";
 import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./pages/Layout";
+import "./App.css";
 
 function App() {
   return (
-    <>
-      <Layout />
-    </>
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Layout />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <DashBoard />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </Router>
   );
 }
 
