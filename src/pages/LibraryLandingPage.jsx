@@ -4,6 +4,8 @@ import LoginModal from "../components/LoginModal";
 import SignupModal from "../components/SignupModal";
 import { Outlet } from "react-router";
 
+import SvgIcon from "../assets/libraryimg";
+
 // import { useNavigate } from "react-router";
 
 export default function LibraryLandingPage() {
@@ -75,11 +77,7 @@ export default function LibraryLandingPage() {
               </div>
             </div>
             <div className="md:w-1/2 mb-8 md:mb-0">
-              <img
-                src="/api/placeholder/600/400"
-                alt="Library Management System"
-                className="rounded-lg shadow-xl"
-              />
+              <SvgIcon />
             </div>
           </div>
         </section>

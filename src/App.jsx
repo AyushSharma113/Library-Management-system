@@ -5,7 +5,7 @@ import LibraryLandingPage from "./pages/LibraryLandingPage";
 
 import Layout from "./pages/Layout";
 import LibraryDashboard from "./pages/DashBoard";
-
+import StudentDashboard from "./pages/StudentDashboard.jsx";
 export default function App() {
   const router = createBrowserRouter([
     {
@@ -19,6 +19,10 @@ export default function App() {
         {
           path: "/dashboard",
           element: <LibraryDashboard />,
+        },
+        {
+          path: "/studentdashboard",
+          element: <StudentDashboard />,
         },
       ],
     },

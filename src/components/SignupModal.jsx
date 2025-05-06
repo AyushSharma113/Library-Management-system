@@ -7,7 +7,9 @@ const SignupModal = ({ setShowSignupModal }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { signup } = useAuth();
+  const { signup, currentUser } = useAuth();
+
+  const isAdmin = currentUser.email === "admin@gmail.com";
   const navigate = useNavigate();
 
   const handleSignupSubmit = async (e) => {
@@ -15,7 +17,11 @@ const SignupModal = ({ setShowSignupModal }) => {
     try {
       await signup(email, password);
       setShowSignupModal(false);
-      navigate("/dashboard");
+      if (isAdmin) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/studentdashboard", { replace: true });
+      }
     } catch (error) {
       setError(error.message);
     }

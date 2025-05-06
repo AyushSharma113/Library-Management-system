@@ -1,7 +1,24 @@
 import React from "react";
+import { useBooks } from "../context/BooksContext";
+import { auth } from "../firebase/firebase";
+import { useAuth } from "../context/AuthContext";
 
 // Individual Book Card Component
 const BookCard = ({ book }) => {
+  const { currentUser } = useAuth();
+  const { deleteBook } = useBooks();
+  const Admin = currentUser?.email === "admin@gmail.com";
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this book?")) {
+      try {
+        await deleteBook(book.id);
+      } catch (error) {
+        console.error("Error deleting book:", error);
+      }
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full transition-transform duration-300 hover:shadow-xl hover:scale-105">
       <div className="relative pb-2/3 h-48 bg-gray-200">
@@ -62,7 +79,7 @@ const BookCard = ({ book }) => {
               </svg>
             ))}
             <span className="ml-1 text-sm text-gray-600">
-              {book.rating.toFixed(1)}
+              {book.rating?.toFixed(1) || "0.0"}
             </span>
           </div>
         </div>
@@ -86,14 +103,17 @@ const BookCard = ({ book }) => {
 
       <div className="px-4 pb-4 mt-auto">
         <button
+          onClick={Admin ? handleDelete : undefined}
           className={`w-full py-2 px-4 rounded-md text-sm transition-colors ${
-            book.available
+            Admin
+              ? "bg-red-600 hover:bg-red-700 text-white"
+              : book.available
               ? "bg-green-600 hover:bg-green-700 text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
-          disabled={!book.available}
+          disabled={!Admin && !book.available}
         >
-          {book.available ? "Borrow" : "Unavailable"}
+          {Admin ? "Delete" : book.available ? "Borrow" : "Unavailable"}
         </button>
       </div>
     </div>
@@ -101,15 +121,19 @@ const BookCard = ({ book }) => {
 };
 
 // Book Card Grid Component
-export default function BookCardGrid({ books }) {
-  // Sample data for multiple books
+export default function BookCardGrid() {
+  const { books } = useBooks();
+
+  if (!books) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center text-gray-600">Loading books...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        Book Collection
-      </h1>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {books.map((book) => (
           <BookCard key={book.id} book={book} />

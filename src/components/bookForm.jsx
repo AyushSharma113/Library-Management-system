@@ -1,8 +1,8 @@
-import React from "react";
-import BookCardGrid from "./components/ListBooks";
-import Books from "./components/Books";
+import React, { useState } from "react";
+import BookCardGrid from "./ListBooks";
+import Books from "./Books";
 // import { TextField, Button, Stack, Paper, Container } from "@mui/material";
-import { auth, db } from "./firebase/firebase";
+import { db } from "../firebase/firebase";
 import {
   addDoc,
   collection,
@@ -11,7 +11,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 
-const bookForm = () => {
+const BookForm = () => {
   const [book, setBook] = useState({
     id: "",
     title: "",
@@ -79,6 +79,10 @@ const bookForm = () => {
 
     if (!book.pages) newErrors.pages = "Number of pages is required";
     else if (book.pages <= 0) newErrors.pages = "Pages must be greater than 0";
+
+    if (!book.quantity) newErrors.quantity = "Quantity is required";
+    else if (book.quantity < 0)
+      newErrors.quantity = "Quantity cannot be negative";
 
     if (!book.isbn.trim()) newErrors.isbn = "ISBN is required";
 
@@ -261,11 +265,11 @@ const bookForm = () => {
                 value={book.quantity}
                 onChange={handleChange}
                 className={`w-full px-3 py-2 border ${
-                  errors.pages ? "border-red-500" : "border-gray-300"
+                  errors.quantity ? "border-red-500" : "border-gray-300"
                 } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
               />
-              {errors.pages && (
-                <p className="mt-1 text-sm text-red-500">{errors.pages}</p>
+              {errors.quantity && (
+                <p className="mt-1 text-sm text-red-500">{errors.quantity}</p>
               )}
             </div>
 
@@ -356,4 +360,4 @@ const bookForm = () => {
   );
 };
 
-export default bookForm;
+export default BookForm;

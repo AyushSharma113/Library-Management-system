@@ -8,7 +8,8 @@ const LoginModal = ({ setShowLoginModal }) => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
 
-  const { login } = useAuth();
+  const { login, currentUser } = useAuth();
+  // const isAdmin = currentUser.email === "admin@gmail.com";
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -18,7 +19,11 @@ const LoginModal = ({ setShowLoginModal }) => {
       await login(email, password);
       console.log("Login successful, attempting navigation");
       setShowLoginModal(false);
-      navigate("/dashboard", { replace: true });
+      if (isAdmin) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/studentdashboard");
+      }
       console.log("Navigation called");
     } catch (error) {
       console.error("Login error:", error);

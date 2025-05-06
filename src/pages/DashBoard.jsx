@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Book, LogOut, PlusCircle, User, Clock } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
+import BookForm from "../components/bookForm";
+import BookCardGrid from "../components/ListBooks";
 
 export default function LibraryDashboard() {
   const navigate = useNavigate();
@@ -147,7 +149,7 @@ export default function LibraryDashboard() {
               <User className="h-6 w-6" />
             </div>
             <div>
-              <h2 className="font-bold">John Librarian</h2>
+              <h2 className="font-bold">Ayush sharma</h2>
               <p className="text-sm text-blue-200">Library Admin</p>
             </div>
           </div>
@@ -216,162 +218,162 @@ export default function LibraryDashboard() {
 
         {/* Content based on active section */}
         <main className="p-6">
-          {activeSection === "books" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {books.map((book) => (
-                <div
-                  key={book.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
-                >
-                  <div className="relative">
-                    <img
-                      src={book.cover}
-                      alt={book.title}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div
-                      className={`absolute top-2 right-2 px-2 py-1 text-xs font-bold text-white rounded ${
-                        book.available ? "bg-green-500" : "bg-red-500"
-                      }`}
-                    >
-                      {book.available ? "Available" : "Borrowed"}
-                    </div>
-                  </div>
-                  <div className="p-4 flex-1">
-                    <h3 className="font-bold text-lg mb-1">{book.title}</h3>
-                    <p className="text-gray-600 mb-2">by {book.author}</p>
-                    <div className="text-sm text-gray-500 space-y-1">
-                      <p>Year: {book.year}</p>
-                      <p>Genre: {book.genre}</p>
-                    </div>
-                  </div>
-                  <div className="bg-gray-50 px-4 py-3 border-t flex justify-between">
-                    <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                      Edit details
-                    </button>
-                    <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                      {book.available ? "Mark as borrowed" : "Mark as returned"}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {
+            activeSection === "books" && <BookCardGrid />
+            //       >
+            //         <div className="relative">
+            //           <img
+            //             src={book.cover}
+            //             alt={book.title}
+            //             className="w-full h-48 object-cover"
+            //           />
+            //           <div
+            //             className={`absolute top-2 right-2 px-2 py-1 text-xs font-bold text-white rounded ${
+            //               book.available ? "bg-green-500" : "bg-red-500"
+            //             }`}
+            //           >
+            //             {book.available ? "Available" : "Borrowed"}
+            //           </div>
+            //         </div>
+            //         <div className="p-4 flex-1">
+            //           <h3 className="font-bold text-lg mb-1">{book.title}</h3>
+            //           <p className="text-gray-600 mb-2">by {book.author}</p>
+            //           <div className="text-sm text-gray-500 space-y-1">
+            //             <p>Year: {book.year}</p>
+            //             <p>Genre: {book.genre}</p>
+            //           </div>
+            //         </div>
+            //         <div className="bg-gray-50 px-4 py-3 border-t flex justify-between">
+            //           <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            //             Edit details
+            //           </button>
+            //           <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            //             {book.available ? "Mark as borrowed" : "Mark as returned"}
+            //           </button>
+            //         </div>
+            //       </div>
+            //     ))}
+            //   </div>
+            // )
+          }
 
-          {activeSection === "addBook" && (
-            <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-              <h2 className="text-xl font-semibold mb-4">Add New Book</h2>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Title
-                    </label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={newBook.title}
-                      onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      placeholder="Book title"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Author
-                    </label>
-                    <input
-                      type="text"
-                      name="author"
-                      value={newBook.author}
-                      onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      placeholder="Author name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Publication Year
-                    </label>
-                    <input
-                      type="number"
-                      name="year"
-                      value={newBook.year}
-                      onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      placeholder="Year"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Genre
-                    </label>
-                    <select
-                      name="genre"
-                      value={newBook.genre}
-                      onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
-                    >
-                      <option value="">Select a genre</option>
-                      <option value="Fiction">Fiction</option>
-                      <option value="Non-Fiction">Non-Fiction</option>
-                      <option value="Fantasy">Fantasy</option>
-                      <option value="Sci-Fi">Sci-Fi</option>
-                      <option value="Mystery">Mystery</option>
-                      <option value="Thriller">Thriller</option>
-                      <option value="Romance">Romance</option>
-                      <option value="Biography">Biography</option>
-                    </select>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Book Cover
-                    </label>
-                    <div className="border border-dashed border-gray-300 rounded-md p-6 text-center">
-                      <div className="space-y-1 text-center">
-                        <div className="flex text-sm text-gray-600 justify-center">
-                          <label className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
-                            <span>Upload a file</span>
-                            <input type="file" className="sr-only" />
-                          </label>
-                          <p className="pl-1">or drag and drop</p>
-                        </div>
-                        <p className="text-xs text-gray-500">
-                          PNG, JPG, GIF up to 5MB
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description
-                    </label>
-                    <textarea
-                      name="description"
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 h-24"
-                      placeholder="Brief description of the book"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="flex justify-end pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setActiveSection("books")}
-                    className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mr-2"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleAddBook}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md"
-                  >
-                    Add Book
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+          {
+            activeSection === "addBook" && <BookForm />
+            //   (
+            //   <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
+            //     <h2 className="text-xl font-semibold mb-4">Add New Book</h2>
+            //     <div className="space-y-4">
+            //       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            //         <div>
+            //           <label className="block text-sm font-medium text-gray-700 mb-1">
+            //             Title
+            //           </label>
+            //           <input
+            //             type="text"
+            //             name="title"
+            //             value={newBook.title}
+            //             onChange={handleInputChange}
+            //             className="w-full border border-gray-300 rounded-md px-3 py-2"
+            //             placeholder="Book title"
+            //           />
+            //         </div>
+            //         <div>
+            //           <label className="block text-sm font-medium text-gray-700 mb-1">
+            //             Author
+            //           </label>
+            //           <input
+            //             type="text"
+            //             name="author"
+            //             value={newBook.author}
+            //             onChange={handleInputChange}
+            //             className="w-full border border-gray-300 rounded-md px-3 py-2"
+            //             placeholder="Author name"
+            //           />
+            //         </div>
+            //         <div>
+            //           <label className="block text-sm font-medium text-gray-700 mb-1">
+            //             Publication Year
+            //           </label>
+            //           <input
+            //             type="number"
+            //             name="year"
+            //             value={newBook.year}
+            //             onChange={handleInputChange}
+            //             className="w-full border border-gray-300 rounded-md px-3 py-2"
+            //             placeholder="Year"
+            //           />
+            //         </div>
+            //         <div>
+            //           <label className="block text-sm font-medium text-gray-700 mb-1">
+            //             Genre
+            //           </label>
+            //           <select
+            //             name="genre"
+            //             value={newBook.genre}
+            //             onChange={handleInputChange}
+            //             className="w-full border border-gray-300 rounded-md px-3 py-2"
+            //           >
+            //             <option value="">Select a genre</option>
+            //             <option value="Fiction">Fiction</option>
+            //             <option value="Non-Fiction">Non-Fiction</option>
+            //             <option value="Fantasy">Fantasy</option>
+            //             <option value="Sci-Fi">Sci-Fi</option>
+            //             <option value="Mystery">Mystery</option>
+            //             <option value="Thriller">Thriller</option>
+            //             <option value="Romance">Romance</option>
+            //             <option value="Biography">Biography</option>
+            //           </select>
+            //         </div>
+            //         <div className="md:col-span-2">
+            //           <label className="block text-sm font-medium text-gray-700 mb-1">
+            //             Book Cover
+            //           </label>
+            //           <div className="border border-dashed border-gray-300 rounded-md p-6 text-center">
+            //             <div className="space-y-1 text-center">
+            //               <div className="flex text-sm text-gray-600 justify-center">
+            //                 <label className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
+            //                   <span>Upload a file</span>
+            //                   <input type="file" className="sr-only" />
+            //                 </label>
+            //                 <p className="pl-1">or drag and drop</p>
+            //               </div>
+            //               <p className="text-xs text-gray-500">
+            //                 PNG, JPG, GIF up to 5MB
+            //               </p>
+            //             </div>
+            //           </div>
+            //         </div>
+            //         <div className="md:col-span-2">
+            //           <label className="block text-sm font-medium text-gray-700 mb-1">
+            //             Description
+            //           </label>
+            //           <textarea
+            //             name="description"
+            //             className="w-full border border-gray-300 rounded-md px-3 py-2 h-24"
+            //             placeholder="Brief description of the book"
+            //           ></textarea>
+            //         </div>
+            //       </div>
+            //       <div className="flex justify-end pt-4">
+            //         <button
+            //           type="button"
+            //           onClick={() => setActiveSection("books")}
+            //           className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mr-2"
+            //         >
+            //           Cancel
+            //         </button>
+            //         <button
+            //           type="button"
+            //           onClick={handleAddBook}
+            //           className="bg-blue-600 text-white px-4 py-2 rounded-md"
+            //         >
+            //           Add Book
+            //         </button>
+            //       </div>
+            //     </div>
+            //   </div>
+            // )
+          }
 
           {activeSection === "requests" && (
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
