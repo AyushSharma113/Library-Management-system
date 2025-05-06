@@ -18,24 +18,32 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   function signup(email, password) {
+    console.log("AuthContext: Signup attempt");
     return createUserWithEmailAndPassword(auth, email, password);
   }
 
   function login(email, password) {
+    console.log("AuthContext: Login attempt");
     return signInWithEmailAndPassword(auth, email, password);
   }
 
   function logout() {
+    console.log("AuthContext: Logout attempt");
     return signOut(auth);
   }
 
   useEffect(() => {
+    console.log("AuthContext: Setting up auth state listener");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("AuthContext: Auth state changed", user);
       setCurrentUser(user);
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      console.log("AuthContext: Cleaning up auth state listener");
+      unsubscribe();
+    };
   }, []);
 
   const value = {
