@@ -14,10 +14,10 @@ export default function LibraryLandingPage() {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen lg:w-full flex flex-col">
         {/* Navigation */}
         <nav className="bg-blue-700 text-white shadow-lg">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="container lg:w-full px-4 py-3 flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +44,7 @@ export default function LibraryLandingPage() {
               </button>
               <button
                 onClick={() => setShowSignupModal(true)}
-                className="bg-white hover:bg-gray-100 text-blue-700 px-4 py-2 rounded-md transition-colors"
+                className="bg-white hover:bg-gray-100 px-4 py-2 rounded-md transition-colors"
               >
                 Sign Up
               </button>
@@ -71,7 +71,7 @@ export default function LibraryLandingPage() {
                 >
                   Get Started
                 </button>
-                <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-md text-lg transition-colors">
+                <button className="bg-gray-200  hover:bg-gray-300  px-6 py-3 rounded-md text-lg transition-colors">
                   Learn More
                 </button>
               </div>

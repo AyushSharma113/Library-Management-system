@@ -4,7 +4,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: #f2f8ff;
+  width: 100%;
 }
 
 svg#freepik_stories-programming:not(.animated) .animable {

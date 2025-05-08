@@ -6,8 +6,8 @@ import { useAuth } from "../context/AuthContext";
 // Individual Book Card Component
 const BookCard = ({ book }) => {
   const { currentUser } = useAuth();
-  const { deleteBook } = useBooks();
-  const Admin = currentUser?.email === "admin@gmail.com";
+  const { deleteBook, requestBorrow } = useBooks();
+  const isAdmin = currentUser?.email === "admin@gmail.com";
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this book?")) {
@@ -16,6 +16,21 @@ const BookCard = ({ book }) => {
       } catch (error) {
         console.error("Error deleting book:", error);
       }
+    }
+  };
+
+  const handleBorrow = async () => {
+    if (!currentUser) {
+      alert("Please login to borrow books");
+      return;
+    }
+
+    try {
+      await requestBorrow(book.id, currentUser.uid, currentUser.email);
+      alert("Borrow request sent successfully!");
+    } catch (error) {
+      console.error("Error requesting book:", error);
+      alert("Failed to request book. Please try again.");
     }
   };
 
@@ -94,6 +109,9 @@ const BookCard = ({ book }) => {
           <div>
             <span className="font-medium">Pages:</span> {book.pages}
           </div>
+          <div>
+            <span className="font-medium">Quantity:</span> {book.quantity || 0}
+          </div>
         </div>
 
         <div className="text-xs text-gray-600 truncate">
@@ -103,17 +121,21 @@ const BookCard = ({ book }) => {
 
       <div className="px-4 pb-4 mt-auto">
         <button
-          onClick={Admin ? handleDelete : undefined}
+          onClick={isAdmin ? handleDelete : handleBorrow}
           className={`w-full py-2 px-4 rounded-md text-sm transition-colors ${
-            Admin
+            isAdmin
               ? "bg-red-600 hover:bg-red-700 text-white"
               : book.available
               ? "bg-green-600 hover:bg-green-700 text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
-          disabled={!Admin && !book.available}
+          disabled={!isAdmin && !book.available}
         >
-          {Admin ? "Delete" : book.available ? "Borrow" : "Unavailable"}
+          {isAdmin
+            ? "Delete"
+            : book.available
+            ? "Request Borrow"
+            : "Unavailable"}
         </button>
       </div>
     </div>

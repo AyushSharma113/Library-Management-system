@@ -9,7 +9,6 @@ const LoginModal = ({ setShowLoginModal }) => {
   const [error, setError] = useState("");
 
   const { login, currentUser } = useAuth();
-  // const isAdmin = currentUser.email === "admin@gmail.com";
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -19,7 +18,8 @@ const LoginModal = ({ setShowLoginModal }) => {
       await login(email, password);
       console.log("Login successful, attempting navigation");
       setShowLoginModal(false);
-      if (isAdmin) {
+      // Check if the logged in user is admin
+      if (email === "admin@gmail.com") {
         navigate("/dashboard", { replace: true });
       } else {
         navigate("/studentdashboard");
